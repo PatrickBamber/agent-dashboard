@@ -45,7 +45,7 @@ function relativeTime(isoString) {
   return 'just now';
 }
 
-export default function TaskFeed({ tasks = [], total = 0, page = 1, pageSize = 20, onPageChange, onAgentFilter, activeAgent, onStatusFilter, activeStatus, loading }) {
+export default function TaskFeed({ tasks = [], total = 0, page = 1, pageSize = 20, onPageChange, onAgentFilter, activeAgent, _onStatusFilter, _activeStatus, loading }) {
   const totalPages = Math.ceil(total / pageSize) || 1;
 
   const renderStars = (r) => {

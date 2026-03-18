@@ -1,4 +1,4 @@
-import { readJsonlLogs, filterByRange, filterByPreviousPeriod } from '../lib/logReader.js';
+import { readJsonlLogs, filterByRange } from '../lib/logReader.js';
 
 export default function kpisRoutes(app) {
   app.get('/api/kpis', (req, res) => {

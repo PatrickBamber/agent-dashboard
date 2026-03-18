@@ -127,14 +127,14 @@ export function calculateKpis(delegations, previousDelegations, range) {
 /**
  * Per-agent stats.
  */
-export function calculateAgentStats(delegations, range) {
+export function calculateAgentStats(delegations, _range) {
   const agents = ['coding', 'research', 'pm', 'devops'];
   const qualityLogs = readJsonlLogs('quality');
 
   return agents.map(agent => {
     const tasks = delegations.filter(d => d.to === agent);
     const completed = tasks.filter(d => d.status === 'completed');
-    const failed = tasks.filter(d => d.status === 'failed');
+    const _failed = tasks.filter(d => d.status === 'failed');
     const successRate = tasks.length > 0 ? Math.round((completed.length / tasks.length) * 100) : 0;
 
     const agentQualityLogs = qualityLogs.filter(q =>

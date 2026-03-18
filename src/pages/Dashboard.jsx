@@ -66,10 +66,6 @@ export default function Dashboard() {
     setSystemLoading(false);
   }, [range, activeAgent, activeStatus, taskPage]);
 
-  useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
-
   // Auto-refresh every 60s
   useEffect(() => {
     const id = setInterval(fetchAll, 60000);
@@ -84,13 +80,6 @@ export default function Dashboard() {
   const handleStatusFilter = (status) => {
     setActiveStatus(status);
     setTaskPage(1);
-  };
-
-  const agentColor = {
-    coding: '#c084fc',
-    research: '#60a5fa',
-    pm: '#34d399',
-    devops: '#fbbf24',
   };
 
   return (
