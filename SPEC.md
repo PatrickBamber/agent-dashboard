@@ -31,7 +31,20 @@ This spec defines the next phase: connecting the dashboard to real agent-cabinet
 
 ## 4. Data Sources
 
-### 4.1 Agent Cabinet Logs
+### 4.1 Local Data Files (v1 — static sample data)
+
+For v1, the dashboard uses static JSON files in `data/` as the data source. These serve as the contract between the data model and the UI, and can later be replaced by live aggregation from real logs.
+
+| Path | Contents | Type |
+|------|----------|------|
+| `data/kpis.json` | Top-level KPI metrics + trend sparklines | `Kpi` |
+| `data/tasks.json` | Paginated task delegation records | `TasksApiResponse` |
+| `data/agents.json` | Aggregated stats per agent | `Agent[]` |
+| `data/system-status.json` | Runtime service health | `SystemStatusApiResponse` |
+
+> **Data types** are defined in `src/types.ts` — the single source of truth for all TypeScript interfaces.
+
+### 4.2 Agent Cabinet Logs (future: live integration)
 
 Located in `~/.openclaw/workspace/agent-cabinet/logs/`:
 
@@ -41,7 +54,7 @@ Located in `~/.openclaw/workspace/agent-cabinet/logs/`:
 | `quality/*.json` | Post-task quality ratings | JSON, one per task |
 | `sessions/*.json` | Session start/end events | JSON, one per session |
 
-### 4.2 Delegation Log Schema (current)
+### 4.3 Delegation Log Schema (current)
 
 ```json
 {
@@ -241,7 +254,13 @@ GET /api/system-status     → [{ service, status, uptime }]
 ```
 agent-dashboard/
 ├── SPEC.md                    ← this file
+├── data/                     ← static sample data (replaced by live later)
+│   ├── kpis.json             ← KPI metrics + trends
+│   ├── tasks.json            ← paginated task list
+│   ├── agents.json           ← per-agent aggregated stats
+│   └── system-status.json    ← service health
 ├── src/
+│   ├── types.ts              ← TypeScript interfaces for all data models
 │   ├── App.jsx
 │   ├── pages/
 │   │   └── Dashboard.jsx      ← main dashboard view
@@ -268,10 +287,26 @@ agent-dashboard/
 └── vite.config.js             ← proxy /api → server in dev
 ```
 
+### 9.1 Data Model Summary (`src/types.ts`)
+
+All TypeScript interfaces are co-located in `src/types.ts` for easy reference and type-checking.
+
+| Interface | Description |
+|-----------|-------------|
+| `Kpi` | Top-level metrics: delegation_rate, success_rate, quality_score, error_count + trend sparklines |
+| `Task` | Single delegation: id, agent, status, quality, confidence_pre/post, timestamps |
+| `Agent` | Aggregated per-agent: name, task IDs, success_rate, avg_quality, total_duration |
+| `SystemStatus` | Service health: service name, status (healthy/degraded/down/unknown), last_checked |
+| `KpiApiResponse` | API envelope wrapping Kpi + range + generated_at |
+| `AgentApiResponse` | API envelope wrapping Agent[] + range + generated_at |
+| `TasksApiResponse` | Paginated task list with items, total, page, page_size |
+| `SystemStatusApiResponse` | API envelope wrapping SystemStatus[] + generated_at |
+
 ---
 
 ## 10. Success Criteria (v1)
 
+- [ ] **Data model defined** — `src/types.ts` has all interfaces; `data/*.json` have realistic sample data
 - [ ] Dashboard loads with real data from agent-cabinet logs (no mock data)
 - [ ] KPI cards show correct values with trend arrows
 - [ ] Agent activity table is populated and sortable

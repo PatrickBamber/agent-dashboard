@@ -1,0 +1,30 @@
+[
+  {
+    "name": "coding",
+    "tasks": ["task-001", "task-005", "task-007", "task-010"],
+    "success_rate": 66.7,
+    "avg_quality": 4.0,
+    "total_duration_ms": 10290000
+  },
+  {
+    "name": "research",
+    "tasks": ["task-002", "task-006"],
+    "success_rate": 100.0,
+    "avg_quality": 4.5,
+    "total_duration_ms": 4260000
+  },
+  {
+    "name": "pm",
+    "tasks": ["task-003", "task-009"],
+    "success_rate": 50.0,
+    "avg_quality": 4.0,
+    "total_duration_ms": 3780000
+  },
+  {
+    "name": "devops",
+    "tasks": ["task-004", "task-008"],
+    "success_rate": 100.0,
+    "avg_quality": 4.0,
+    "total_duration_ms": 1500000
+  }
+]
