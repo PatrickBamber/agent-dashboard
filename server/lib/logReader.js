@@ -157,16 +157,35 @@ export function calculateAgentStats(delegations, range) {
       : null;
 
     return {
-      agent,
+      name,
+      tasks: tasks.map(t => t.task_id || String(Math.random())),
       total: tasks.length,
-      completed: completed.length,
-      failed: failed.length,
-      running: tasks.filter(d => d.status === 'in_progress' || d.status === 'running').length,
       successRate,
       avgQuality,
       avgDurationMs,
+      totalDurationMs: durations.reduce((s, d) => s + d, 0),
     };
   });
+}
+
+/**
+ * Build trend sparkline array for a metric over last N days.
+ * Returns array of length N with the metric value per day.
+ */
+export function buildSparkline(getValue, range, filterFn) {
+  const days = range === '24h' ? 1 : range === '7d' ? 7 : range === '30d' ? 30 : 7;
+  const now = new Date();
+  const result = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const dayStart = new Date(now);
+    dayStart.setDate(dayStart.getDate() - i);
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(dayStart);
+    dayEnd.setDate(dayEnd.getDate() + 1);
+    const dayLogs = filterFn(dayStart, dayEnd);
+    result.push(getValue(dayLogs));
+  }
+  return result;
 }
 
 /**

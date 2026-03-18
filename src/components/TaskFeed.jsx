@@ -1,30 +1,59 @@
-import { useState } from 'react';
 import './TaskFeed.css';
 
 const statusConfig = {
-  completed: { label: 'completed', cls: 'task-completed' },
-  failed: { label: 'failed', cls: 'task-failed' },
-  in_progress: { label: 'running', cls: 'task-progress' },
-  running: { label: 'running', cls: 'task-progress' },
-  queued: { label: 'queued', cls: 'task-queued' },
+  completed: { label: 'Completed', cls: 'task-completed' },
+  failed:    { label: 'Failed',    cls: 'task-failed'    },
+  running:   { label: 'Running',   cls: 'task-running'   },
+  queued:    { label: 'Queued',    cls: 'task-queued'    },
 };
 
 const agentColors = {
-  coding: '#c084fc',
-  research: '#60a5fa',
-  pm: '#34d399',
-  devops: '#fbbf24',
-  none: '#7a7a9a',
+  coding:  '#c084fc',
+  research:'#60a5fa',
+  pm:      '#34d399',
+  devops:  '#fbbf24',
 };
 
+const agentLabels = {
+  coding:  'Coding',
+  research: 'Research',
+  pm:       'PM',
+  devops:   'DevOps',
+};
+
+// Format duration_ms → "3m 24s" or "1h 2m"
+function formatDuration(ms) {
+  if (ms == null || ms < 0) return '—';
+  const s = Math.round(ms / 1000);
+  const m = Math.floor(s / 60);
+  const h = Math.floor(m / 60);
+  if (h > 0) return `${h}h ${m % 60}m`;
+  if (m > 0) return `${m}m ${s % 60}s`;
+  return `${s}s`;
+}
+
+// Relative time: "2m ago", "3h ago", "1d ago"
+function relativeTime(isoString) {
+  if (!isoString) return '—';
+  const diff = Date.now() - new Date(isoString).getTime();
+  const m = Math.floor(diff / 60000);
+  const h = Math.floor(m / 60);
+  const d = Math.floor(h / 24);
+  if (d > 0) return `${d}d ago`;
+  if (h > 0) return `${h}h ago`;
+  if (m > 0) return `${m}m ago`;
+  return 'just now';
+}
+
 export default function TaskFeed({ tasks = [], total = 0, page = 1, pageSize = 20, onPageChange, onAgentFilter, activeAgent, onStatusFilter, activeStatus, loading }) {
-  const totalPages = Math.ceil(total / pageSize);
+  const totalPages = Math.ceil(total / pageSize) || 1;
 
   const renderStars = (r) => {
-    if (!r) return <span className="task-rating-empty">—</span>;
+    if (r == null) return <span className="task-rating-empty">—</span>;
+    const n = Math.round(r);
     return (
       <span className="task-rating">
-        {'★'.repeat(r)}{'☆'.repeat(5 - r)}
+        {'★'.repeat(n)}{'☆'.repeat(5 - n)}
       </span>
     );
   };
@@ -55,20 +84,21 @@ export default function TaskFeed({ tasks = [], total = 0, page = 1, pageSize = 2
               return (
                 <li key={task.id} className={`task-item ${cfg.cls}`}>
                   <div className="task-info">
-                    <span className="task-name" title={task.name}>{task.name}</span>
+                    <span className="task-name" title={task.id}>{task.id}</span>
                     <span
                       className="task-agent"
                       style={{ color: agentColors[task.agent] || '#888' }}
                       onClick={() => onAgentFilter && onAgentFilter(task.agent === activeAgent ? null : task.agent)}
+                      title={`Filter by ${task.agent}`}
                     >
-                      @{task.agent}
+                      @{agentLabels[task.agent] || task.agent}
                     </span>
                   </div>
                   <div className="task-meta">
-                    <span className={`task-status status-${cfg.label}`}>{cfg.label}</span>
-                    <span className="task-duration">{task.duration}</span>
-                    {renderStars(task.rating)}
-                    <span className="task-time">{task.time}</span>
+                    <span className={`task-status status-${cfg.label.toLowerCase()}`}>{cfg.label}</span>
+                    <span className="task-duration">{formatDuration(task.duration_ms)}</span>
+                    {renderStars(task.quality)}
+                    <span className="task-time">{relativeTime(task.timestamps?.started)}</span>
                   </div>
                 </li>
               );

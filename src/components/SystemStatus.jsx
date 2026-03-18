@@ -1,21 +1,39 @@
 import './SystemStatus.css';
 
 const statusConfig = {
-  operational: { cls: 'status-green', label: 'Operational' },
-  degraded: { cls: 'status-yellow', label: 'Degraded' },
-  down: { cls: 'status-red', label: 'Down' },
-  unknown: { cls: 'status-unknown', label: 'Unknown' },
+  healthy:  { cls: 'status-green',    label: 'Healthy'  },
+  degraded: { cls: 'status-yellow',   label: 'Degraded' },
+  down:     { cls: 'status-red',      label: 'Down'     },
+  unknown:  { cls: 'status-unknown',  label: 'Unknown'  },
 };
 
 const overallIcon = {
-  operational: '●',
+  healthy:  '●',
   degraded: '◐',
-  down: '○',
-  unknown: '?',
+  down:     '○',
+  unknown:  '?',
 };
 
-export default function SystemStatus({ systemStatus, loading }) {
-  if (loading) {
+function getOverallStatus(services) {
+  if (!services || services.length === 0) return 'unknown';
+  if (services.some(s => s.status === 'down')) return 'down';
+  if (services.some(s => s.status === 'degraded')) return 'degraded';
+  return 'healthy';
+}
+
+function relativeTime(isoString) {
+  if (!isoString) return '—';
+  const diff = Date.now() - new Date(isoString).getTime();
+  const s = Math.floor(diff / 1000);
+  const m = Math.floor(s / 60);
+  const h = Math.floor(m / 60);
+  if (h > 0) return `${h}h ago`;
+  if (m > 0) return `${m}m ago`;
+  return 'just now';
+}
+
+export default function SystemStatus({ services = [], generatedAt, loading }) {
+  if (loading && services.length === 0) {
     return (
       <div className="system-status">
         {[...Array(4)].map((_, i) => (
@@ -25,28 +43,34 @@ export default function SystemStatus({ systemStatus, loading }) {
     );
   }
 
-  if (!systemStatus) return null;
+  if (!services || services.length === 0) return null;
 
-  const overall = statusConfig[systemStatus.overall] || statusConfig.unknown;
+  const overall = getOverallStatus(services);
+  const overallCfg = statusConfig[overall] || statusConfig.unknown;
 
   return (
     <div className="system-status">
       <div className="system-overall">
-        <span className={`overall-dot ${overall.cls}`}>{overallIcon[systemStatus.overall]}</span>
-        <span className={`overall-label ${overall.cls}`}>{overall.label}</span>
+        <span className={`overall-dot ${overallCfg.cls}`}>{overallIcon[overall]}</span>
+        <span className={`overall-label ${overallCfg.cls}`}>{overallCfg.label}</span>
+        {generatedAt && (
+          <span className="overall-timestamp">Checked {relativeTime(generatedAt)}</span>
+        )}
       </div>
       <ul className="service-list">
-        {systemStatus.services.map((svc) => {
+        {services.map((svc) => {
           const cfg = statusConfig[svc.status] || statusConfig.unknown;
           return (
-            <li key={svc.name} className="service-item">
+            <li key={svc.service} className="service-item">
               <div className="service-info">
                 <span className={`service-dot ${cfg.cls}`} />
-                <span className="service-name">{svc.name}</span>
+                <span className="service-name">{svc.service}</span>
               </div>
               <div className="service-meta">
                 <span className={`service-status ${cfg.cls}`}>{cfg.label}</span>
-                <span className="service-detail">{svc.detail}</span>
+                <span className="service-uptime">{svc.uptime}</span>
+                {svc.message && <span className="service-message">{svc.message}</span>}
+                <span className="service-checked">{relativeTime(svc.lastChecked)}</span>
               </div>
             </li>
           );

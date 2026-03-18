@@ -37,6 +37,9 @@ export default function AgentTable({ agents = [], onAgentClick, activeAgent }) {
   };
 
   const sorted = [...agents].sort((a, b) => {
+    if (sortKey === 'name') {
+      return sortDir === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+    }
     const av = a[sortKey] ?? -1;
     const bv = b[sortKey] ?? -1;
     if (av === bv) return 0;
@@ -53,8 +56,8 @@ export default function AgentTable({ agents = [], onAgentClick, activeAgent }) {
       <table className="agent-table">
         <thead>
           <tr>
-            <th onClick={() => handleSort('agent')} className="th-agent">
-              Agent {renderSortIcon('agent')}
+            <th onClick={() => handleSort('name')} className="th-agent">
+              Agent {renderSortIcon('name')}
             </th>
             <th onClick={() => handleSort('total')}>
               Tasks {renderSortIcon('total')}
@@ -73,14 +76,14 @@ export default function AgentTable({ agents = [], onAgentClick, activeAgent }) {
         <tbody>
           {sorted.map(a => (
             <tr
-              key={a.agent}
-              className={`agent-row ${activeAgent === a.agent ? 'active' : ''}`}
-              onClick={() => onAgentClick && onAgentClick(a.agent === activeAgent ? null : a.agent)}
-              style={{ '--agent-color': agentColors[a.agent] || '#888' }}
+              key={a.name}
+              className={`agent-row ${activeAgent === a.name ? 'active' : ''}`}
+              onClick={() => onAgentClick && onAgentClick(a.name === activeAgent ? null : a.name)}
+              style={{ '--agent-color': agentColors[a.name] || '#888' }}
             >
               <td>
-                <span className="agent-badge" style={{ background: agentColors[a.agent] + '20', color: agentColors[a.agent] }}>
-                  {agentLabels[a.agent] || a.agent}
+                <span className="agent-badge" style={{ background: (agentColors[a.name] || '#888') + '20', color: agentColors[a.name] || '#888' }}>
+                  {agentLabels[a.name] || a.name}
                 </span>
               </td>
               <td className="num">{a.total}</td>

@@ -123,26 +123,26 @@ export default function Dashboard() {
           <>
             <KpiCard
               label="Delegation Rate"
-              value={kpis.delegationRate?.value ?? 0}
+              value={kpis.delegationRate ?? 0}
               unit="%"
-              trend={kpis.delegationRate}
+              sparkline={kpis.trends?.delegationRate}
             />
             <KpiCard
               label="Task Success"
-              value={kpis.taskSuccess?.value ?? 0}
+              value={kpis.taskSuccess ?? 0}
               unit="%"
-              trend={kpis.taskSuccess}
+              sparkline={kpis.trends?.taskSuccess}
             />
             <KpiCard
               label="Avg Quality"
-              value={kpis.avgQuality?.value ?? 0}
+              value={kpis.avgQuality ?? 0}
               unit="/5"
-              trend={kpis.avgQuality}
+              sparkline={kpis.trends?.avgQuality}
             />
             <KpiCard
               label="Error Count"
-              value={kpis.errorCount?.value ?? 0}
-              trend={kpis.errorCount}
+              value={kpis.errorCount ?? 0}
+              sparkline={kpis.trends?.errorCount}
               invertTrend
             />
           </>
@@ -232,7 +232,7 @@ export default function Dashboard() {
       {/* Framework Status */}
       <section className="panel panel-full">
         <h2>Framework Status</h2>
-        <SystemStatus systemStatus={systemStatus} loading={systemLoading} />
+        <SystemStatus services={systemStatus?.services} generatedAt={systemStatus?.generatedAt} loading={systemLoading} />
       </section>
     </div>
   );

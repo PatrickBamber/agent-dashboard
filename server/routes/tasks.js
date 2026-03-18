@@ -15,56 +15,50 @@ export default function tasksRoutes(app) {
         tasks = tasks.filter(t => t.to === agent);
       }
       if (status && status !== 'all') {
-        tasks = tasks.filter(t => t.status === status);
+        // Support both old 'in_progress' and new 'running' status
+        tasks = tasks.filter(t => {
+          if (status === 'running') return t.status === 'running' || t.status === 'in_progress';
+          return t.status === status;
+        });
       }
 
       // Sort by timestamp descending
-      tasks.sort((a, b) => new Date(b.timestamp || b.startedAt) - new Date(a.timestamp || a.startedAt));
+      tasks.sort((a, b) => {
+        const ta = new Date(a.timestamp || a.startedAt || 0);
+        const tb = new Date(b.timestamp || b.startedAt || 0);
+        return tb - ta;
+      });
 
       const total = tasks.length;
       const start = (page - 1) * pageSize;
       const items = tasks.slice(start, start + pageSize).map(t => {
-        const ts = new Date(t.timestamp || t.startedAt);
-        const durationMs = t.completedAt
-          ? new Date(t.completedAt) - ts
-          : (t.status === 'in_progress' || t.status === 'running')
-            ? Date.now() - ts
+        const started = new Date(t.timestamp || t.startedAt || new Date());
+        const completed = t.completedAt ? new Date(t.completedAt) : null;
+        const duration_ms = completed
+          ? completed - started
+          : (t.status === 'running' || t.status === 'in_progress')
+            ? Date.now() - started.getTime()
             : null;
 
-        const formatDuration = (ms) => {
-          if (ms === null) return '—';
-          const s = Math.floor(ms / 1000);
-          const m = Math.floor(s / 60);
-          const h = Math.floor(m / 60);
-          if (h > 0) return `${h}h ${m % 60}m`;
-          if (m > 0) return `${m}m ${s % 60}s`;
-          return `${s}s`;
-        };
-
-        const relativeTime = (() => {
-          const diff = Date.now() - ts.getTime();
-          const m = Math.floor(diff / 60000);
-          const h = Math.floor(m / 60);
-          const d = Math.floor(h / 24);
-          if (d > 0) return `${d}d ago`;
-          if (h > 0) return `${h}h ago`;
-          if (m > 0) return `${m}m ago`;
-          return 'just now';
-        })();
+        // Map server status 'in_progress' → 'running' per types.ts
+        const serverStatus = t.status === 'in_progress' ? 'running' : t.status;
 
         return {
-          id: t.task_id,
-          name: (t.task_description || t.task_id || '').slice(0, 60),
+          id: t.task_id || t.id || String(Math.random()),
           agent: t.to || 'none',
-          status: t.status,
-          duration: formatDuration(durationMs),
-          rating: t.quality_rating ?? null,
-          time: relativeTime,
-          timestamp: ts.toISOString(),
+          status: serverStatus,
+          quality: t.quality_rating ?? null,
+          confidencePre: t.confidencePre ?? null,
+          confidencePost: t.confidencePost ?? null,
+          timestamps: {
+            started: started.toISOString(),
+            completed: completed ? completed.toISOString() : null,
+          },
+          duration_ms,
         };
       });
 
-      res.json({ items, total, page, pageSize });
+      res.json({ items, total, page, pageSize, range });
     } catch (err) {
       console.error('[/api/tasks]', err);
       res.status(500).json({ error: 'Failed to fetch tasks' });
