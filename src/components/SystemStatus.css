@@ -1,0 +1,95 @@
+.system-status {
+  min-height: 80px;
+}
+
+.system-overall {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.overall-dot {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.overall-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.service-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.service-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.service-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.service-name {
+  font-size: 0.85rem;
+}
+
+.service-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.service-status {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.service-detail {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.status-green { color: var(--green); }
+.status-yellow { color: var(--yellow); }
+.status-red { color: var(--red); }
+.status-unknown { color: var(--text-dim); }
+
+.status-green.service-dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.status-yellow.service-dot { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+.status-red.service-dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+.status-unknown.service-dot { background: var(--text-dim); }
+
+.skeleton-row {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

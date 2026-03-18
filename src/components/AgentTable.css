@@ -1,0 +1,99 @@
+.agent-table-wrap {
+  overflow-x: auto;
+}
+
+.agent-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.agent-table th {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.agent-table th:hover {
+  color: var(--text);
+}
+
+.th-agent {
+  cursor: pointer;
+}
+
+.sort-icon {
+  font-size: 0.65rem;
+  margin-left: 0.25rem;
+  opacity: 0.4;
+}
+
+.sort-icon.active {
+  opacity: 1;
+  color: var(--pink);
+}
+
+.agent-table td {
+  padding: 0.65rem 0.75rem;
+  border-top: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.agent-row {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.agent-row:hover {
+  background: var(--surface2);
+}
+
+.agent-row.active {
+  background: var(--pink-glow);
+}
+
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.agent-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.rate-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.rate-good { background: var(--green-dim); color: var(--green); }
+.rate-ok { background: var(--yellow-dim); color: var(--yellow); }
+.rate-bad { background: var(--red-dim); color: var(--red); }
+
+.quality-stars {
+  color: var(--yellow);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+.quality-num {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+}
+
+.text-dim { color: var(--text-dim); }
