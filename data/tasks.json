@@ -1,0 +1,138 @@
+{
+  "items": [
+    {
+      "id": "task-001",
+      "agent": "coding",
+      "status": "completed",
+      "quality": 5,
+      "confidencePre": 60,
+      "confidencePost": 95,
+      "timestamps": {
+        "started": "2026-03-18T08:30:00Z",
+        "completed": "2026-03-18T08:52:00Z"
+      },
+      "duration_ms": 1320000
+    },
+    {
+      "id": "task-002",
+      "agent": "research",
+      "status": "completed",
+      "quality": 4,
+      "confidencePre": 70,
+      "confidencePost": 88,
+      "timestamps": {
+        "started": "2026-03-18T08:15:00Z",
+        "completed": "2026-03-18T08:41:00Z"
+      },
+      "duration_ms": 1560000
+    },
+    {
+      "id": "task-003",
+      "agent": "pm",
+      "status": "failed",
+      "quality": null,
+      "confidencePre": 50,
+      "confidencePost": 30,
+      "timestamps": {
+        "started": "2026-03-18T09:00:00Z",
+        "completed": "2026-03-18T09:18:00Z"
+      },
+      "duration_ms": 1080000
+    },
+    {
+      "id": "task-004",
+      "agent": "devops",
+      "status": "completed",
+      "quality": 4,
+      "confidencePre": 80,
+      "confidencePost": 97,
+      "timestamps": {
+        "started": "2026-03-18T07:45:00Z",
+        "completed": "2026-03-18T08:10:00Z"
+      },
+      "duration_ms": 1500000
+    },
+    {
+      "id": "task-005",
+      "agent": "coding",
+      "status": "running",
+      "quality": null,
+      "confidencePre": 65,
+      "confidencePost": null,
+      "timestamps": {
+        "started": "2026-03-18T10:00:00Z",
+        "completed": null
+      },
+      "duration_ms": null
+    },
+    {
+      "id": "task-006",
+      "agent": "research",
+      "status": "completed",
+      "quality": 5,
+      "confidencePre": 55,
+      "confidencePost": 92,
+      "timestamps": {
+        "started": "2026-03-17T14:20:00Z",
+        "completed": "2026-03-17T15:05:00Z"
+      },
+      "duration_ms": 2700000
+    },
+    {
+      "id": "task-007",
+      "agent": "coding",
+      "status": "completed",
+      "quality": 3,
+      "confidencePre": 75,
+      "confidencePost": 70,
+      "timestamps": {
+        "started": "2026-03-17T11:00:00Z",
+        "completed": "2026-03-17T11:45:00Z"
+      },
+      "duration_ms": 2700000
+    },
+    {
+      "id": "task-008",
+      "agent": "devops",
+      "status": "queued",
+      "quality": null,
+      "confidencePre": null,
+      "confidencePost": null,
+      "timestamps": {
+        "started": null,
+        "completed": null
+      },
+      "duration_ms": null
+    },
+    {
+      "id": "task-009",
+      "agent": "pm",
+      "status": "completed",
+      "quality": 4,
+      "confidencePre": 60,
+      "confidencePost": 85,
+      "timestamps": {
+        "started": "2026-03-17T09:30:00Z",
+        "completed": "2026-03-17T10:15:00Z"
+      },
+      "duration_ms": 2700000
+    },
+    {
+      "id": "task-010",
+      "agent": "coding",
+      "status": "failed",
+      "quality": null,
+      "confidencePre": 45,
+      "confidencePost": 20,
+      "timestamps": {
+        "started": "2026-03-16T16:00:00Z",
+        "completed": "2026-03-16T17:00:00Z"
+      },
+      "duration_ms": 3600000
+    }
+  ],
+  "total": 10,
+  "page": 1,
+  "pageSize": 20,
+  "range": "7d"
+}

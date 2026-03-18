@@ -1,0 +1,12 @@
+{
+  "delegationRate": 78.5,
+  "taskSuccess": 91.2,
+  "avgQuality": 4.3,
+  "errorCount": 7,
+  "trends": {
+    "delegationRate": [65.0, 70.2, 72.8, 75.1, 76.3, 77.8, 78.5],
+    "taskSuccess": [85.0, 86.4, 88.1, 89.7, 90.2, 90.8, 91.2],
+    "avgQuality": [4.0, 4.1, 4.15, 4.2, 4.25, 4.28, 4.3],
+    "errorCount": [12, 10, 9, 8, 8, 7, 7]
+  }
+}

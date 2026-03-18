@@ -1,162 +1,239 @@
-import { useState, useEffect } from 'react'
-import './Dashboard.css'
+import { useState, useEffect, useCallback } from 'react';
+import { api } from '../api/index.js';
+import KpiCard from '../components/KpiCard.jsx';
+import AgentTable from '../components/AgentTable.jsx';
+import { VolumeChart, QualityChart } from '../components/TrendChart.jsx';
+import TaskFeed from '../components/TaskFeed.jsx';
+import SystemStatus from '../components/SystemStatus.jsx';
+import './Dashboard.css';
 
-const MOCK_DATA = {
-  kpis: {
-    delegationRate: { value: 78, change: 5, trend: 'up' },
-    taskSuccess: { value: 94, change: 2, trend: 'up' },
-    qualityScore: { value: 4.7, change: 0.3, trend: 'up' },
-    errorCount: { value: 3, change: -2, trend: 'down' },
-  },
-  recentTasks: [
-    { id: 1, name: 'Deploy staging environment', agent: 'coding', status: 'completed', time: '2m ago' },
-    { id: 2, name: 'Review PR #42 — auth refactor', agent: 'coding', status: 'completed', time: '8m ago' },
-    { id: 3, name: 'Check deployment health', agent: 'monitoring', status: 'in-progress', time: 'running' },
-    { id: 4, name: 'Update dependencies', agent: 'coding', status: 'queued', time: 'queued' },
-    { id: 5, name: 'Generate test coverage report', agent: 'devops', status: 'failed', time: '15m ago' },
-  ],
-  activeProjects: [
-    { id: 1, name: 'agent-dashboard', status: 'active', tasks: 12, done: 9 },
-    { id: 2, name: 'openclaw-config', status: 'active', tasks: 5, done: 2 },
-    { id: 3, name: 'agent-cabinet', status: 'review', tasks: 8, done: 8 },
-  ],
-  frameworkStatus: [
-    { name: 'OpenClaw', status: 'operational', uptime: '99.98%' },
-    { name: 'Codex Runtime', status: 'operational', uptime: '99.95%' },
-    { name: 'GitHub API', status: 'degraded', uptime: '98.12%' },
-    { name: 'Telegram Bridge', status: 'operational', uptime: '100%' },
-  ],
-}
-
-const statusColor = (status) => {
-  switch (status) {
-    case 'operational': return 'status-green'
-    case 'degraded': return 'status-yellow'
-    case 'down': return 'status-red'
-    default: return ''
-  }
-}
-
-const taskStatusClass = (status) => {
-  switch (status) {
-    case 'completed': return 'task-completed'
-    case 'in-progress': return 'task-progress'
-    case 'failed': return 'task-failed'
-    case 'queued': return 'task-queued'
-    default: return ''
-  }
-}
+const RANGES = ['24h', '7d', '30d'];
 
 export default function Dashboard() {
-  const [lastRefresh, setLastRefresh] = useState(new Date())
+  const [lastRefresh, setLastRefresh] = useState(new Date());
+  const [range, setRange] = useState('7d');
+  const [activeAgent, setActiveAgent] = useState(null);
+  const [activeStatus, setActiveStatus] = useState('all');
+  const [taskPage, setTaskPage] = useState(1);
+
+  // Data state
+  const [kpis, setKpis] = useState(null);
+  const [kpisLoading, setKpisLoading] = useState(true);
+  const [kpisError, setKpisError] = useState(null);
+
+  const [agents, setAgents] = useState([]);
+  const [agentsLoading, setAgentsLoading] = useState(true);
+
+  const [trends, setTrends] = useState(null);
+  const [trendsLoading, setTrendsLoading] = useState(true);
+
+  const [tasks, setTasks] = useState({ items: [], total: 0, page: 1, pageSize: 20 });
+  const [tasksLoading, setTasksLoading] = useState(true);
+
+  const [systemStatus, setSystemStatus] = useState(null);
+  const [systemLoading, setSystemLoading] = useState(true);
+
+  const fetchAll = useCallback(async () => {
+    setLastRefresh(new Date());
+    setKpisLoading(true);
+    setAgentsLoading(true);
+    setTrendsLoading(true);
+    setTasksLoading(true);
+    setSystemLoading(true);
+
+    const [kpisRes, agentsRes, trendsRes, tasksRes, systemRes] = await Promise.allSettled([
+      api.kpis(range),
+      api.agents(range),
+      api.trends(range),
+      api.tasks({ range, agent: activeAgent || undefined, status: activeStatus !== 'all' ? activeStatus : undefined, page: taskPage, pageSize: 20 }),
+      api.systemStatus(),
+    ]);
+
+    if (kpisRes.status === 'fulfilled') { setKpis(kpisRes.value.data); setKpisError(null); }
+    else { setKpisError(kpisRes.reason?.message); }
+    setKpisLoading(false);
+
+    if (agentsRes.status === 'fulfilled') setAgents(agentsRes.value.data);
+    setAgentsLoading(false);
+
+    if (trendsRes.status === 'fulfilled') setTrends(trendsRes.value.data || trendsRes.value);
+    setTrendsLoading(false);
+
+    if (tasksRes.status === 'fulfilled') setTasks(tasksRes.value.data || tasksRes.value);
+    setTasksLoading(false);
+
+    if (systemRes.status === 'fulfilled') setSystemStatus(systemRes.value.data || systemRes.value);
+    setSystemLoading(false);
+  }, [range, activeAgent, activeStatus, taskPage]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setLastRefresh(new Date())
-    }, 60000)
-    return () => clearInterval(timer)
-  }, [])
+    fetchAll();
+  }, [fetchAll]);
 
-  const { kpis } = MOCK_DATA
+  // Auto-refresh every 60s
+  useEffect(() => {
+    const id = setInterval(fetchAll, 60000);
+    return () => clearInterval(id);
+  }, [fetchAll]);
+
+  const handleAgentFilter = (agent) => {
+    setActiveAgent(agent);
+    setTaskPage(1);
+  };
+
+  const handleStatusFilter = (status) => {
+    setActiveStatus(status);
+    setTaskPage(1);
+  };
+
+  const agentColor = {
+    coding: '#c084fc',
+    research: '#60a5fa',
+    pm: '#34d399',
+    devops: '#fbbf24',
+  };
 
   return (
     <div className="dashboard">
+      {/* Header */}
       <div className="dashboard-header">
         <h1>Agent Dashboard</h1>
-        <span className="refresh-badge">
-          Auto-refresh: 60s · Last: {lastRefresh.toLocaleTimeString()}
-        </span>
+        <div className="header-controls">
+          <select
+            className="range-select"
+            value={range}
+            onChange={e => { setRange(e.target.value); setTaskPage(1); }}
+          >
+            {RANGES.map(r => <option key={r} value={r}>Last {r}</option>)}
+          </select>
+          <span className="refresh-badge">
+            Auto-refresh: 60s · Last: {lastRefresh.toLocaleTimeString()}
+          </span>
+          <button className="refresh-btn" onClick={fetchAll} title="Refresh now">
+            ↻
+          </button>
+        </div>
       </div>
 
+      {/* KPI Strip */}
       <section className="kpi-grid">
-        <div className="kpi-card">
-          <span className="kpi-label">Delegation Rate</span>
-          <span className="kpi-value">{kpis.delegationRate.value}%</span>
-          <span className={`kpi-change trend-${kpis.delegationRate.trend}`}>
-            {kpis.delegationRate.trend === 'up' ? '↑' : '↓'} {Math.abs(kpis.delegationRate.change)}%
-          </span>
-        </div>
-        <div className="kpi-card">
-          <span className="kpi-label">Task Success</span>
-          <span className="kpi-value">{kpis.taskSuccess.value}%</span>
-          <span className={`kpi-change trend-${kpis.taskSuccess.trend}`}>
-            {kpis.taskSuccess.trend === 'up' ? '↑' : '↓'} {Math.abs(kpis.taskSuccess.change)}%
-          </span>
-        </div>
-        <div className="kpi-card">
-          <span className="kpi-label">Quality Score</span>
-          <span className="kpi-value">{kpis.qualityScore.value}</span>
-          <span className={`kpi-change trend-${kpis.qualityScore.trend}`}>
-            {kpis.qualityScore.trend === 'up' ? '↑' : '↓'} {Math.abs(kpis.qualityScore.change)}
-          </span>
-        </div>
-        <div className="kpi-card">
-          <span className="kpi-label">Error Count</span>
-          <span className="kpi-value">{kpis.errorCount.value}</span>
-          <span className={`kpi-change trend-${kpis.errorCount.trend === 'down' ? 'up' : 'down'}`}>
-            {kpis.errorCount.trend === 'down' ? '↓' : '↑'} {Math.abs(kpis.errorCount.change)}
-          </span>
-        </div>
+        {kpisLoading && !kpis ? (
+          [...Array(4)].map((_, i) => <div key={i} className="skeleton-card" />)
+        ) : kpis ? (
+          <>
+            <KpiCard
+              label="Delegation Rate"
+              value={kpis.delegationRate ?? 0}
+              unit="%"
+              sparkline={kpis.trends?.delegationRate}
+            />
+            <KpiCard
+              label="Task Success"
+              value={kpis.taskSuccess ?? 0}
+              unit="%"
+              sparkline={kpis.trends?.taskSuccess}
+            />
+            <KpiCard
+              label="Avg Quality"
+              value={kpis.avgQuality ?? 0}
+              unit="/5"
+              sparkline={kpis.trends?.avgQuality}
+            />
+            <KpiCard
+              label="Error Count"
+              value={kpis.errorCount ?? 0}
+              sparkline={kpis.trends?.errorCount}
+              invertTrend
+            />
+          </>
+        ) : kpisError ? (
+          <div className="error-banner">⚠ Failed to load KPIs: {kpisError}</div>
+        ) : null}
       </section>
 
-      <div className="dashboard-grid">
+      {/* Agent Activity + Trends */}
+      <div className="two-col">
         <section className="panel">
-          <h2>Recent Tasks</h2>
-          <ul className="task-list">
-            {MOCK_DATA.recentTasks.map((task) => (
-              <li key={task.id} className={`task-item ${taskStatusClass(task.status)}`}>
-                <div className="task-info">
-                  <span className="task-name">{task.name}</span>
-                  <span className="task-agent">@{task.agent}</span>
-                </div>
-                <div className="task-meta">
-                  <span className={`task-status status-${task.status}`}>{task.status}</span>
-                  <span className="task-time">{task.time}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <h2>Agent Activity</h2>
+          {agentsLoading && !agents.length ? (
+            <div className="skeleton-rows">{[...Array(4)].map((_, i) => <div key={i} className="skeleton-row" style={{ height: '44px', marginBottom: '4px' }} />)}</div>
+          ) : (
+            <AgentTable agents={agents} onAgentClick={handleAgentFilter} activeAgent={activeAgent} />
+          )}
         </section>
 
         <section className="panel">
-          <h2>Active Projects</h2>
-          <ul className="project-list">
-            {MOCK_DATA.activeProjects.map((project) => {
-              const pct = Math.round((project.done / project.tasks) * 100)
-              return (
-                <li key={project.id} className="project-item">
-                  <div className="project-header">
-                    <span className="project-name">{project.name}</span>
-                    <span className={`project-status status-${project.status}`}>{project.status}</span>
-                  </div>
-                  <div className="progress-bar">
-                    <div className="progress-fill" style={{ width: `${pct}%` }}></div>
-                  </div>
-                  <span className="project-progress">{project.done}/{project.tasks} tasks · {pct}%</span>
-                </li>
-              )
-            })}
-          </ul>
-        </section>
-
-        <section className="panel">
-          <h2>Framework Status</h2>
-          <ul className="framework-list">
-            {MOCK_DATA.frameworkStatus.map((fw) => (
-              <li key={fw.name} className="framework-item">
-                <div className="framework-info">
-                  <span className={`status-dot ${statusColor(fw.status)}`}></span>
-                  <span className="framework-name">{fw.name}</span>
-                </div>
-                <div className="framework-meta">
-                  <span className={`fw-status-text ${statusColor(fw.status)}`}>{fw.status}</span>
-                  <span className="fw-uptime">{fw.uptime}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <h2>Trends</h2>
+          {trendsLoading && !trends ? (
+            <div className="skeleton-rows">{[...Array(3)].map((_, i) => <div key={i} className="skeleton-row" style={{ height: '36px', marginBottom: '8px' }} />)}</div>
+          ) : trends ? (
+            <>
+              <div className="trend-section">
+                <h3 className="trend-title">Task Volume</h3>
+                {trends.volume?.length > 0
+                  ? <VolumeChart data={trends.volume} />
+                  : <div className="chart-empty">No data</div>
+                }
+              </div>
+              <div className="trend-section">
+                <h3 className="trend-title">Quality Trend</h3>
+                {trends.quality?.length > 0
+                  ? <QualityChart data={trends.quality} />
+                  : <div className="chart-empty">No data</div>
+                }
+              </div>
+            </>
+          ) : null}
         </section>
       </div>
+
+      {/* Recent Tasks */}
+      <section className="panel panel-full">
+        <div className="panel-header">
+          <h2>Recent Tasks</h2>
+          <div className="task-filters">
+            <select
+              className="filter-select"
+              value={activeAgent || 'all'}
+              onChange={e => handleAgentFilter(e.target.value === 'all' ? null : e.target.value)}
+            >
+              <option value="all">All Agents</option>
+              <option value="coding">Coding</option>
+              <option value="research">Research</option>
+              <option value="pm">PM</option>
+              <option value="devops">DevOps</option>
+            </select>
+            <select
+              className="filter-select"
+              value={activeStatus}
+              onChange={e => handleStatusFilter(e.target.value)}
+            >
+              <option value="all">All Status</option>
+              <option value="completed">Completed</option>
+              <option value="failed">Failed</option>
+              <option value="in_progress">Running</option>
+              <option value="queued">Queued</option>
+            </select>
+            <span className="task-count">{tasks.total} tasks</span>
+          </div>
+        </div>
+        <TaskFeed
+          tasks={tasks.items}
+          total={tasks.total}
+          page={tasks.page}
+          pageSize={tasks.pageSize}
+          onPageChange={setTaskPage}
+          onAgentFilter={handleAgentFilter}
+          activeAgent={activeAgent}
+          loading={tasksLoading}
+        />
+      </section>
+
+      {/* Framework Status */}
+      <section className="panel panel-full">
+        <h2>Framework Status</h2>
+        <SystemStatus services={systemStatus?.services} generatedAt={systemStatus?.generatedAt} loading={systemLoading} />
+      </section>
     </div>
-  )
+  );
 }
