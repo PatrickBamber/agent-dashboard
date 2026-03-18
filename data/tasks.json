@@ -5,8 +5,8 @@
       "agent": "coding",
       "status": "completed",
       "quality": 5,
-      "confidence_pre": 60,
-      "confidence_post": 95,
+      "confidencePre": 60,
+      "confidencePost": 95,
       "timestamps": {
         "started": "2026-03-18T08:30:00Z",
         "completed": "2026-03-18T08:52:00Z"
@@ -18,8 +18,8 @@
       "agent": "research",
       "status": "completed",
       "quality": 4,
-      "confidence_pre": 70,
-      "confidence_post": 88,
+      "confidencePre": 70,
+      "confidencePost": 88,
       "timestamps": {
         "started": "2026-03-18T08:15:00Z",
         "completed": "2026-03-18T08:41:00Z"
@@ -31,8 +31,8 @@
       "agent": "pm",
       "status": "failed",
       "quality": null,
-      "confidence_pre": 50,
-      "confidence_post": 30,
+      "confidencePre": 50,
+      "confidencePost": 30,
       "timestamps": {
         "started": "2026-03-18T09:00:00Z",
         "completed": "2026-03-18T09:18:00Z"
@@ -44,8 +44,8 @@
       "agent": "devops",
       "status": "completed",
       "quality": 4,
-      "confidence_pre": 80,
-      "confidence_post": 97,
+      "confidencePre": 80,
+      "confidencePost": 97,
       "timestamps": {
         "started": "2026-03-18T07:45:00Z",
         "completed": "2026-03-18T08:10:00Z"
@@ -57,8 +57,8 @@
       "agent": "coding",
       "status": "running",
       "quality": null,
-      "confidence_pre": 65,
-      "confidence_post": null,
+      "confidencePre": 65,
+      "confidencePost": null,
       "timestamps": {
         "started": "2026-03-18T10:00:00Z",
         "completed": null
@@ -70,8 +70,8 @@
       "agent": "research",
       "status": "completed",
       "quality": 5,
-      "confidence_pre": 55,
-      "confidence_post": 92,
+      "confidencePre": 55,
+      "confidencePost": 92,
       "timestamps": {
         "started": "2026-03-17T14:20:00Z",
         "completed": "2026-03-17T15:05:00Z"
@@ -83,8 +83,8 @@
       "agent": "coding",
       "status": "completed",
       "quality": 3,
-      "confidence_pre": 75,
-      "confidence_post": 70,
+      "confidencePre": 75,
+      "confidencePost": 70,
       "timestamps": {
         "started": "2026-03-17T11:00:00Z",
         "completed": "2026-03-17T11:45:00Z"
@@ -96,8 +96,8 @@
       "agent": "devops",
       "status": "queued",
       "quality": null,
-      "confidence_pre": null,
-      "confidence_post": null,
+      "confidencePre": null,
+      "confidencePost": null,
       "timestamps": {
         "started": null,
         "completed": null
@@ -109,8 +109,8 @@
       "agent": "pm",
       "status": "completed",
       "quality": 4,
-      "confidence_pre": 60,
-      "confidence_post": 85,
+      "confidencePre": 60,
+      "confidencePost": 85,
       "timestamps": {
         "started": "2026-03-17T09:30:00Z",
         "completed": "2026-03-17T10:15:00Z"
@@ -122,8 +122,8 @@
       "agent": "coding",
       "status": "failed",
       "quality": null,
-      "confidence_pre": 45,
-      "confidence_post": 20,
+      "confidencePre": 45,
+      "confidencePost": 20,
       "timestamps": {
         "started": "2026-03-16T16:00:00Z",
         "completed": "2026-03-16T17:00:00Z"
@@ -133,6 +133,6 @@
   ],
   "total": 10,
   "page": 1,
-  "page_size": 20,
+  "pageSize": 20,
   "range": "7d"
 }

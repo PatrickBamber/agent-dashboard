@@ -3,27 +3,31 @@
     {
       "service": "openclaw-gateway",
       "status": "healthy",
-      "last_checked": "2026-03-18T16:30:00Z",
-      "message": "v2.14.1 — uptime 3d 14h"
+      "uptime": "3d 14h",
+      "lastChecked": "2026-03-18T16:30:00Z",
+      "message": "v2.14.1"
     },
     {
       "service": "telegram-bridge",
       "status": "healthy",
-      "last_checked": "2026-03-18T16:30:00Z",
+      "uptime": "3d 14h",
+      "lastChecked": "2026-03-18T16:30:00Z",
       "message": "connected — 1 active session"
     },
     {
       "service": "agent-cabinet-logs",
       "status": "healthy",
-      "last_checked": "2026-03-18T16:30:00Z",
+      "uptime": "3d 14h",
+      "lastChecked": "2026-03-18T16:30:00Z",
       "message": "last write 2m ago"
     },
     {
       "service": "github-api",
       "status": "degraded",
-      "last_checked": "2026-03-18T16:30:00Z",
+      "uptime": "3d 14h",
+      "lastChecked": "2026-03-18T16:30:00Z",
       "message": "rate limit: 47/60 remaining"
     }
   ],
-  "generated_at": "2026-03-18T16:30:00Z"
+  "generatedAt": "2026-03-18T16:30:00Z"
 }
