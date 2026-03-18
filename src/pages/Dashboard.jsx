@@ -49,20 +49,20 @@ export default function Dashboard() {
       api.systemStatus(),
     ]);
 
-    if (kpisRes.status === 'fulfilled') { setKpis(kpisRes.value); setKpisError(null); }
+    if (kpisRes.status === 'fulfilled') { setKpis(kpisRes.value.data); setKpisError(null); }
     else { setKpisError(kpisRes.reason?.message); }
     setKpisLoading(false);
 
-    if (agentsRes.status === 'fulfilled') setAgents(agentsRes.value);
+    if (agentsRes.status === 'fulfilled') setAgents(agentsRes.value.data);
     setAgentsLoading(false);
 
-    if (trendsRes.status === 'fulfilled') setTrends(trendsRes.value);
+    if (trendsRes.status === 'fulfilled') setTrends(trendsRes.value.data || trendsRes.value);
     setTrendsLoading(false);
 
-    if (tasksRes.status === 'fulfilled') setTasks(tasksRes.value);
+    if (tasksRes.status === 'fulfilled') setTasks(tasksRes.value.data || tasksRes.value);
     setTasksLoading(false);
 
-    if (systemRes.status === 'fulfilled') setSystemStatus(systemRes.value);
+    if (systemRes.status === 'fulfilled') setSystemStatus(systemRes.value.data || systemRes.value);
     setSystemLoading(false);
   }, [range, activeAgent, activeStatus, taskPage]);
 

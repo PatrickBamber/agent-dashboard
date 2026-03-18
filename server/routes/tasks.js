@@ -58,7 +58,7 @@ export default function tasksRoutes(app) {
         };
       });
 
-      res.json({ items, total, page, pageSize, range });
+      res.json({ items, total, page, pageSize, range, generatedAt: new Date().toISOString() });
     } catch (err) {
       console.error('[/api/tasks]', err);
       res.status(500).json({ error: 'Failed to fetch tasks' });

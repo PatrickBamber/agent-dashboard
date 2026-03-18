@@ -157,7 +157,7 @@ export function calculateAgentStats(delegations, range) {
       : null;
 
     return {
-      name,
+      name: agent,
       tasks: tasks.map(t => t.task_id || String(Math.random())),
       total: tasks.length,
       successRate,

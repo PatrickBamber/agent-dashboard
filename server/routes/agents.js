@@ -6,7 +6,11 @@ export default function agentsRoutes(app) {
       const range = req.query.range || '7d';
       const delegations = filterByRange(readJsonlLogs('delegations'), range);
       const stats = calculateAgentStats(delegations, range);
-      res.json(stats);
+      res.json({
+        data: stats,
+        range,
+        generatedAt: new Date().toISOString(),
+      });
     } catch (err) {
       console.error('[/api/agents]', err);
       res.status(500).json({ error: 'Failed to calculate agent stats' });
@@ -35,7 +39,7 @@ export default function agentsRoutes(app) {
         return { date: day.date, label: day.label, avgQuality: avg };
       });
 
-      res.json({ volume: byDay, quality: qualityByDay });
+      res.json({ data: { volume: byDay, quality: qualityByDay }, range, generatedAt: new Date().toISOString() });
     } catch (err) {
       console.error('[/api/trends]', err);
       res.status(500).json({ error: 'Failed to calculate trends' });

@@ -66,11 +66,15 @@ export default function kpisRoutes(app) {
       };
 
       res.json({
-        delegationRate,
-        taskSuccess,
-        avgQuality,
-        errorCount,
-        trends,
+        data: {
+          delegationRate,
+          taskSuccess,
+          avgQuality,
+          errorCount,
+          trends,
+        },
+        range,
+        generatedAt: new Date().toISOString(),
       });
     } catch (err) {
       console.error('[/api/kpis]', err);
