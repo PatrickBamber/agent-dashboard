@@ -25,13 +25,6 @@ function readJsonl(subDir) {
     });
 }
 
-function filter24h(logs) {
-  const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-  return logs.filter(l => {
-    const ts = new Date(l.ts || l.timestamp || l.startedAt || 0).getTime();
-    return ts >= cutoff;
-  });
-}
 
 function filterPeriod(logs, days) {
   const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;

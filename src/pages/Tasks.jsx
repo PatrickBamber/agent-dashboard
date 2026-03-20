@@ -35,14 +35,20 @@ export default function Tasks() {
   const [page, setPage] = useState(1);
   const [tasks, setTasks] = useState({ items: [], total: 0, page: 1, pageSize: 20 });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   const fetchTasks = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await api.tasks({ range, agent: agent !== 'all' ? agent : undefined, status: status !== 'all' ? status : undefined, page, pageSize: 20 });
-      setTasks(res);
+      const result = await api.tasks({
+        range,
+        agent: agent !== 'all' ? agent : undefined,
+        status: status !== 'all' ? status : undefined,
+        page,
+        pageSize: 20,
+      });
+      setTasks(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load tasks');
     } finally {
@@ -55,12 +61,10 @@ export default function Tasks() {
     fetchTasks();
   }, [fetchTasks]);
 
-  const totalPages = useMemo(() => Math.ceil(tasks.total / tasks.pageSize) || 1, [tasks.total, tasks.pageSize]);
-
-  const handleRangeChange = useCallback((r) => { setRange(r); setPage(1); }, []);
-  const handleAgentChange = useCallback((a) => { setAgent(a); setPage(1); }, []);
-  const handleStatusChange = useCallback((s) => { setStatus(s); setPage(1); }, []);
-  const handlePageChange = useCallback((p) => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
+  const totalPages = useMemo(
+    () => Math.ceil(tasks.total / tasks.pageSize) || 1,
+    [tasks.total, tasks.pageSize]
+  );
 
   return (
     <div className="tasks-page">
@@ -73,7 +77,7 @@ export default function Tasks() {
         <select
           className="filter-select"
           value={range}
-          onChange={e => handleRangeChange(e.target.value)}
+          onChange={e => { setRange(e.target.value); setPage(1); }}
           aria-label="Date range"
         >
           {RANGES.map(r => <option key={r} value={r}>Last {r}</option>)}
@@ -82,7 +86,7 @@ export default function Tasks() {
         <select
           className="filter-select"
           value={agent}
-          onChange={e => handleAgentChange(e.target.value)}
+          onChange={e => { setAgent(e.target.value); setPage(1); }}
           aria-label="Filter by agent"
         >
           {AGENTS.map(a => <option key={a} value={a}>{AGENT_LABELS[a] ?? a}</option>)}
@@ -91,7 +95,7 @@ export default function Tasks() {
         <select
           className="filter-select"
           value={status}
-          onChange={e => handleStatusChange(e.target.value)}
+          onChange={e => { setStatus(e.target.value); setPage(1); }}
           aria-label="Filter by status"
         >
           {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABELS[s] ?? s}</option>)}
@@ -111,8 +115,8 @@ export default function Tasks() {
           total={tasks.total}
           page={page}
           pageSize={tasks.pageSize}
-          onPageChange={handlePageChange}
-          onAgentFilter={handleAgentChange}
+          onPageChange={p => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          onAgentFilter={a => { setAgent(a); setPage(1); }}
           activeAgent={agent}
           loading={loading}
         />
