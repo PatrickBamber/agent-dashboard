@@ -1,15 +1,15 @@
-import { Link, useLocation } from 'react-router-dom'
-import './BottomNav.css'
+import { Link, useLocation } from 'react-router-dom';
+import './BottomNav.css';
 
 const tabs = [
   { to: '/', label: 'Dashboard', icon: '◈' },
   { to: '/tasks', label: 'Tasks', icon: '◎' },
   { to: '/projects', label: 'Projects', icon: '◉' },
   { to: '/settings', label: 'Settings', icon: '⚙' },
-]
+];
 
 export default function BottomNav() {
-  const location = useLocation()
+  const location = useLocation();
 
   return (
     <nav className="bottom-nav">
@@ -24,5 +24,5 @@ export default function BottomNav() {
         </Link>
       ))}
     </nav>
-  )
+  );
 }

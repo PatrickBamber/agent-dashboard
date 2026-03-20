@@ -1,7 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import './InsightCard.css';
 
-function timeAgo(isoString) {
+interface Insight {
+  text: string;
+  generatedAt: string | null;
+  period: string;
+  stats: {
+    total: number;
+    completed: number;
+    failed: number;
+    active: number;
+    avgQuality: number | null;
+  } | null;
+}
+
+function timeAgo(isoString: string | null): string {
   if (!isoString) return '';
   const diff = Date.now() - new Date(isoString).getTime();
   const m = Math.floor(diff / 60000);
@@ -12,26 +25,21 @@ function timeAgo(isoString) {
 }
 
 export default function InsightCard() {
-  const [insight, setInsight] = useState(null);
+  const [insight, setInsight] = useState<Insight | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchInsight = useCallback(async () => {
     try {
       const res = await fetch('/api/insight');
-      if (res.ok) {
-        const data = await res.json();
-        setInsight(data);
-      }
+      if (res.ok) setInsight(await res.json());
     } catch {
-      // silently ignore — insight is supplementary
+      // supplementary — silently ignore
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    fetchInsight();
-  }, [fetchInsight]);
+  useEffect(() => { fetchInsight(); }, [fetchInsight]);
 
   if (loading) {
     return (
@@ -57,9 +65,7 @@ export default function InsightCard() {
           <span title="Completed">{insight.stats.completed ?? 0} ✓</span>
           <span title="Failed" className={insight.stats.failed > 0 ? 'insight-fail' : ''}>{insight.stats.failed ?? 0} ✗</span>
           <span title="Running">{insight.stats.active ?? 0} ⚡</span>
-          {insight.stats.avgQuality != null && (
-            <span title="Avg quality">★ {insight.stats.avgQuality}</span>
-          )}
+          {insight.stats.avgQuality != null && <span title="Avg quality">★ {insight.stats.avgQuality}</span>}
         </div>
       )}
     </div>

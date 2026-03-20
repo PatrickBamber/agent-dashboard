@@ -31,6 +31,9 @@ RUN npm ci
 # Copy everything for the build
 COPY . .
 
+# TypeScript type check (fail build on type errors)
+RUN npx tsc --noEmit
+
 # Build React frontend with vite
 RUN npx vite build
 

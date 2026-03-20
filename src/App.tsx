@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Tasks from './pages/Tasks'
 import './App.css'
 
-function Placeholder({ title }) {
+function Placeholder({ title }: { title: string }) {
   return (
     <div style={{ padding: '2rem', color: 'var(--text-dim)' }}>
       <h2>{title}</h2>
