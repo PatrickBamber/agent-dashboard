@@ -33,6 +33,9 @@ export default function Dashboard() {
   const [systemStatus, setSystemStatus] = useState(null);
   const [systemLoading, setSystemLoading] = useState(true);
 
+  // Count currently-running tasks for live indicator
+  const runningCount = tasks.items.filter(t => t.status === 'in_progress' || t.status === 'running').length;
+
   const fetchAll = useCallback(async () => {
     setLastRefresh(new Date());
     setKpisLoading(true);
@@ -66,9 +69,10 @@ export default function Dashboard() {
     setSystemLoading(false);
   }, [range, activeAgent, activeStatus, taskPage]);
 
-  // Auto-refresh every 60s
+  // Fetch immediately on mount, then auto-refresh every 15s
   useEffect(() => {
-    const id = setInterval(fetchAll, 60000);
+    fetchAll();
+    const id = setInterval(fetchAll, 15000);
     return () => clearInterval(id);
   }, [fetchAll]);
 
@@ -96,8 +100,14 @@ export default function Dashboard() {
             {RANGES.map(r => <option key={r} value={r}>Last {r}</option>)}
           </select>
           <span className="refresh-badge">
-            Auto-refresh: 60s · Last: {lastRefresh.toLocaleTimeString()}
+            Auto-refresh: 15s · Last: {lastRefresh.toLocaleTimeString()}
           </span>
+          {runningCount > 0 && (
+            <span className="live-badge" title={`${runningCount} task${runningCount > 1 ? 's' : ''} currently running`}>
+              <span className="live-dot" />
+              {runningCount} running
+            </span>
+          )}
           <button className="refresh-btn" onClick={fetchAll} title="Refresh now">
             ↻
           </button>

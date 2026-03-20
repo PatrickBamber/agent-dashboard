@@ -109,3 +109,10 @@
     border-radius: 0;
   }
 }
+
+/* Hide navbar on mobile — bottom nav replaces it */
+@media (max-width: 600px) {
+  .navbar {
+    display: none;
+  }
+}

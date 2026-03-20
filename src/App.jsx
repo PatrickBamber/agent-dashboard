@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import BottomNav from './components/BottomNav'
 import Dashboard from './pages/Dashboard'
 import './App.css'
 
@@ -16,6 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
+      <BottomNav />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/tasks" element={<Placeholder title="Tasks" />} />
