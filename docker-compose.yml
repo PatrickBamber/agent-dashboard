@@ -1,0 +1,50 @@
+# =============================================================================
+# docker-compose.yml — Agent KPI Dashboard
+# =============================================================================
+# Lightweight: single service, bind-mounts OpenClaw session DB from host.
+#
+# Prerequisites:
+#   - OpenClaw must be running and generating session logs
+#   - The sessions.db file must exist at the path below
+#
+# Run:
+#   docker compose up -d
+#   Visit http://localhost:3001
+# =============================================================================
+
+services:
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: agent-dashboard:latest
+    container_name: agent-dashboard
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:3001:3001"
+
+    volumes:
+      # Bind mount OpenClaw session database (read-only)
+      # The dashboard reads session data but never writes to this file
+      - ~/.openclaw/agents/main/sessions/sessions.db:/data/sessions.db:ro
+
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+    security_opt:
+      - no-new-privileges:true
+
+    read_only: true
+    tmpfs:
+      - /tmp
