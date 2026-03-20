@@ -71,9 +71,9 @@ export default function Dashboard() {
 
   // Fetch immediately on mount, then auto-refresh every 15s
   useEffect(() => {
-    fetchAll();
+    const timer = setTimeout(fetchAll, 0);
     const id = setInterval(fetchAll, 15000);
-    return () => clearInterval(id);
+    return () => { clearTimeout(timer); clearInterval(id); };
   }, [fetchAll]);
 
   const handleAgentFilter = (agent) => {
