@@ -5,6 +5,7 @@ import AgentTable from '../components/AgentTable.jsx';
 import { VolumeChart, QualityChart } from '../components/TrendChart.jsx';
 import TaskFeed from '../components/TaskFeed.jsx';
 import SystemStatus from '../components/SystemStatus.jsx';
+import InsightCard from '../components/InsightCard.jsx';
 import './Dashboard.css';
 
 const RANGES = ['24h', '7d', '30d'];
@@ -149,6 +150,9 @@ export default function Dashboard() {
           <div className="error-banner">⚠ Failed to load KPIs: {kpisError}</div>
         ) : null}
       </section>
+
+      {/* Insight Card */}
+      <InsightCard />
 
       {/* Agent Activity + Trends */}
       <div className="two-col">

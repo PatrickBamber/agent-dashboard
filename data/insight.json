@@ -1,0 +1,12 @@
+{
+  "text": "No tasks recorded in the last 24 hours.",
+  "generatedAt": "2026-03-20T19:57:24.423Z",
+  "period": "24h",
+  "stats": {
+    "total": 0,
+    "completed": 0,
+    "failed": 0,
+    "active": 0,
+    "avgQuality": null
+  }
+}

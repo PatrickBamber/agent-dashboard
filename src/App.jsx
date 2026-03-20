@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import BottomNav from './components/BottomNav'
 import Dashboard from './pages/Dashboard'
+import Tasks from './pages/Tasks'
 import './App.css'
 
 function Placeholder({ title }) {
@@ -20,7 +21,7 @@ function App() {
       <BottomNav />
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/tasks" element={<Placeholder title="Tasks" />} />
+        <Route path="/tasks" element={<Tasks />} />
         <Route path="/projects" element={<Placeholder title="Projects" />} />
         <Route path="/settings" element={<Placeholder title="Settings" />} />
       </Routes>

@@ -5,6 +5,7 @@ import agentsRoutes from './routes/agents.js';
 import tasksRoutes from './routes/tasks.js';
 import systemRoutes from './routes/system.js';
 import statsRoutes from './routes/stats.js';
+import insightRoutes from './routes/insight.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -28,6 +29,7 @@ agentsRoutes(app);
 tasksRoutes(app);
 systemRoutes(app);
 statsRoutes(app);
+insightRoutes(app);
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', ts: new Date().toISOString() });

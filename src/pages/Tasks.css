@@ -1,0 +1,86 @@
+.tasks-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tasks-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tasks-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--pink), #c77dff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.tasks-total {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.tasks-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tasks-loading-badge {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  animation: shimmer 1.5s infinite;
+}
+
+.tasks-error {
+  background: var(--red-dim);
+  border: 1px solid var(--red);
+  color: var(--red);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.tasks-pagination-info {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  padding: 0.5rem;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .tasks-page {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .tasks-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .tasks-filters {
+    gap: 0.4rem;
+  }
+
+  .filter-select {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
