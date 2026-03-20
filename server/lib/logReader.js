@@ -44,7 +44,7 @@ export function filterByRange(logs, range) {
   else cutoff = new Date(now - 7 * 24 * 60 * 60 * 1000); // default 7d
 
   return logs.filter(l => {
-    const ts = new Date(l.timestamp || l.startedAt || 0);
+    const ts = new Date(l.timestamp || l.startedAt || l.ts || 0);
     return ts >= cutoff;
   });
 }
@@ -72,7 +72,7 @@ export function getPreviousPeriod(range) {
 export function filterByPreviousPeriod(logs, range) {
   const { previousStart, currentStart } = getPreviousPeriod(range);
   return logs.filter(l => {
-    const ts = new Date(l.timestamp || l.startedAt || 0);
+    const ts = new Date(l.timestamp || l.startedAt || l.ts || 0);
     return ts >= previousStart && ts < currentStart;
   });
 }
@@ -146,7 +146,7 @@ export function calculateAgentStats(delegations, _range) {
 
     const durations = completed
       .map(d => {
-        const start = new Date(d.timestamp || d.startedAt);
+        const start = new Date(d.timestamp || d.startedAt || d.ts || 0);
         const end = new Date(d.completedAt || d.timestamp);
         return end - start;
       })
@@ -208,7 +208,7 @@ export function aggregateByDay(logs, range) {
     dayEnd.setDate(dayEnd.getDate() + 1);
 
     const dayLogs = logs.filter(l => {
-      const ts = new Date(l.timestamp || l.startedAt || 0);
+      const ts = new Date(l.timestamp || l.startedAt || l.ts || 0);
       return ts >= dayStart && ts < dayEnd;
     });
 
