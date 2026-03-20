@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
 import kpisRoutes from './routes/kpis.js';
 import agentsRoutes from './routes/agents.js';
 import tasksRoutes from './routes/tasks.js';
