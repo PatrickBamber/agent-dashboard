@@ -81,24 +81,24 @@ export default function AgentTable({ agents = [], onAgentClick, activeAgent }) {
               onClick={() => onAgentClick && onAgentClick(a.name === activeAgent ? null : a.name)}
               style={{ '--agent-color': agentColors[a.name] || '#888' }}
             >
-              <td>
+              <td data-label="Agent">
                 <span className="agent-badge" style={{ background: (agentColors[a.name] || '#888') + '20', color: agentColors[a.name] || '#888' }}>
                   {agentLabels[a.name] || a.name}
                 </span>
               </td>
-              <td className="num">{a.total}</td>
-              <td className="num">
+              <td className="num" data-label="Tasks">{a.total}</td>
+              <td className="num" data-label="Success">
                 <span className={`rate-badge ${a.successRate >= 80 ? 'rate-good' : a.successRate >= 50 ? 'rate-ok' : 'rate-bad'}`}>
                   {a.successRate}%
                 </span>
               </td>
-              <td className="num">
+              <td className="num" data-label="Avg Quality">
                 {a.avgQuality != null
                   ? <span className="quality-stars">{'★'.repeat(Math.round(a.avgQuality))}{'☆'.repeat(5 - Math.round(a.avgQuality))} <span className="quality-num">{a.avgQuality}</span></span>
                   : <span className="text-dim">—</span>
                 }
               </td>
-              <td className="num text-dim">{formatDuration(a.avgDurationMs)}</td>
+              <td className="num text-dim" data-label="Avg Duration">{formatDuration(a.avgDurationMs)}</td>
             </tr>
           ))}
         </tbody>

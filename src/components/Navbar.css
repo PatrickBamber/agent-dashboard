@@ -34,6 +34,7 @@
   list-style: none;
   display: flex;
   gap: 0.25rem;
+  margin-left: auto;
 }
 
 .nav-link {
@@ -56,18 +57,55 @@
   background: var(--pink-glow);
 }
 
-/* Mobile: wrap links, reduce padding */
+/* Burger button — hidden on desktop */
+.burger-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  margin-left: auto;
+}
+
+.burger-btn:hover {
+  background: var(--surface2);
+}
+
+/* Mobile: burger menu */
 @media (max-width: 600px) {
   .navbar {
     padding: 0.75rem 1rem;
-    gap: 0.5rem;
-  }
-  .navbar-links {
-    gap: 0;
+    gap: 0.75rem;
     flex-wrap: wrap;
   }
-  .nav-link {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.8rem;
+
+  .navbar-brand {
+    flex-shrink: 0;
+  }
+
+  .burger-btn {
+    display: block;
+  }
+
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .navbar-links.open {
+    display: flex;
+  }
+
+  .navbar-links .nav-link {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 0;
   }
 }

@@ -97,3 +97,48 @@
 }
 
 .text-dim { color: var(--text-dim); }
+
+/* Mobile: card layout instead of table */
+@media (max-width: 600px) {
+  .agent-table-wrap {
+    overflow-x: visible;
+  }
+
+  .agent-table,
+  .agent-table thead,
+  .agent-table tbody,
+  .agent-table th,
+  .agent-table td,
+  .agent-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .agent-table thead {
+    display: none;
+  }
+
+  .agent-table tbody tr {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .agent-table td {
+    padding: 0.25rem 0.5rem;
+    border: none;
+    text-align: left;
+  }
+
+  .agent-table td::before {
+    content: attr(data-label) ": ";
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    min-width: 90px;
+  }
+}
