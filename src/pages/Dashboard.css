@@ -179,6 +179,8 @@ body {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 1.25rem;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .panel-full {
