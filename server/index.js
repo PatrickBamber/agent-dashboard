@@ -36,7 +36,8 @@ app.get('/health', (_req, res) => {
 });
 
 // SPA fallback — serve index.html for non-API routes (supports client-side routing)
-app.get("/", (_req, res) => {
+// Use app.use() so it catches routes Express doesn't recognise (API routes are registered first)
+app.use((_req, res) => {
   res.sendFile('/app/public/index.html');
 });
 
