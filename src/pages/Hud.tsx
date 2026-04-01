@@ -185,8 +185,8 @@ export default function Hud() {
           </h2>
           <ul className="error-list">
             {errors.map((err, i) => (
-              <li key={i} className={`error-item error-${err.severity}`}>
-                <span className="error-severity">{err.severity}</span>
+              <li key={i} className={`error-item error-${err.severity || 'unknown'}`}>
+                <span className="error-severity">{err.severity || 'unknown'}</span>
                 <span className="error-desc">{err.description}</span>
                 <span className="error-time">{timeAgo(err.timestamp)}</span>
               </li>
@@ -221,7 +221,7 @@ export default function Hud() {
             {recent
               .filter(r => filter === 'errors' ? r.status === 'failed' : true)
               .map((item, i) => (
-                <li key={i} className={`feed-item feed-${item.status}`}>
+                <li key={i} className={`feed-item feed-${item.status || 'unknown'}`}>
                   <div className="feed-item-top">
                     <span className="feed-task">{item.task}</span>
                     <span className="feed-time">{timeAgo(item.startedAt)}</span>

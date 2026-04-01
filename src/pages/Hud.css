@@ -413,6 +413,16 @@
 .error-medium { border-left: 3px solid var(--hud-yellow); }
 .error-low { border-left: 3px solid var(--hud-text-dim); }
 
+/* severity badge defaults */
+.error-item .error-severity {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
 .error-severity {
   font-size: 0.65rem;
   font-weight: 700;
@@ -440,7 +450,7 @@
 /* ── Responsive: Tablet/Desktop ───────────────────────── */
 @media (min-width: 768px) {
   .hud {
-    max-width: 600px;
+    max-width: 720px;
     margin: 0 auto;
     padding-bottom: 2rem;
   }
@@ -459,4 +469,59 @@
   .hud-quick-stats {
     padding: 0;
   }
+}
+
+/* ── Responsive: iPad Pro landscape ───────────────────── */
+@media (min-width: 1024px) {
+  .hud {
+    max-width: 900px;
+    padding: 1.5rem 0 2rem;
+  }
+
+  .hud-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .hud-card {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .kitten-status-label {
+    font-size: 1.4rem;
+  }
+
+  .stat-chip {
+    padding: 0.75rem 1.5rem;
+    min-width: 80px;
+  }
+
+  .stat-val {
+    font-size: 1.5rem;
+  }
+
+  .feed-item {
+    padding: 0.85rem 1rem;
+  }
+
+  .feed-task {
+    font-size: 0.9rem;
+  }
+
+  .hud-section-title {
+    font-size: 0.85rem;
+  }
+}
+
+/* ── Error unknown severity ────────────────────────────── */
+.error-unknown {
+  border-left: 3px solid var(--hud-text-dim);
+}
+.error-unknown .error-severity {
+  background: #7a7a9a20;
+  color: var(--hud-text-dim);
+}
+
+/* Fix null severity class */
+[class*="error-"] {
+  /* ensure consistent border */
 }

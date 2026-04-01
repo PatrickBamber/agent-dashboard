@@ -7,7 +7,7 @@ services:
     container_name: agent-dashboard
     restart: unless-stopped
     ports:
-      - "127.0.0.1:3001:3001"
+      - "3001:3001"
     volumes:
       # OpenClaw agents directory (read-only) — needed for HUD session tracking
       - ~/.openclaw/agents:/root/.openclaw/agents:ro
