@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import BottomNav from './components/BottomNav'
 import Dashboard from './pages/Dashboard'
 import Tasks from './pages/Tasks'
+import Hud from './pages/Hud'
 import './App.css'
 
 function Placeholder({ title }: { title: string }) {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/projects" element={<Placeholder title="Projects" />} />
         <Route path="/settings" element={<Placeholder title="Settings" />} />
+        <Route path="/hud" element={<Hud />} />
       </Routes>
     </BrowserRouter>
   )

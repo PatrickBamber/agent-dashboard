@@ -4,8 +4,8 @@ import kpisRoutes from './routes/kpis.js';
 import agentsRoutes from './routes/agents.js';
 import tasksRoutes from './routes/tasks.js';
 import systemRoutes from './routes/system.js';
-
 import insightRoutes from './routes/insight.js';
+import hudRoutes from './routes/hud.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -29,6 +29,7 @@ agentsRoutes(app);
 tasksRoutes(app);
 systemRoutes(app);
 insightRoutes(app);
+hudRoutes(app);
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', ts: new Date().toISOString() });

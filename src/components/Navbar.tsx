@@ -2,9 +2,9 @@ import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 const links = [
+  { to: '/hud', label: 'HUD' },
   { to: '/', label: 'Dashboard' },
   { to: '/tasks', label: 'Tasks' },
-  { to: '/projects', label: 'Projects' },
   { to: '/settings', label: 'Settings' },
 ];
 

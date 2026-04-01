@@ -2,9 +2,9 @@ import { Link, useLocation } from 'react-router-dom';
 import './BottomNav.css';
 
 const tabs = [
+  { to: '/hud', label: 'HUD', icon: '◈' },
   { to: '/', label: 'Dashboard', icon: '◈' },
   { to: '/tasks', label: 'Tasks', icon: '◎' },
-  { to: '/projects', label: 'Projects', icon: '◉' },
   { to: '/settings', label: 'Settings', icon: '⚙' },
 ];
 
