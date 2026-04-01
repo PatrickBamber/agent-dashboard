@@ -4,7 +4,7 @@ import kpisRoutes from './routes/kpis.js';
 import agentsRoutes from './routes/agents.js';
 import tasksRoutes from './routes/tasks.js';
 import systemRoutes from './routes/system.js';
-import statsRoutes from './routes/stats.js';
+
 import insightRoutes from './routes/insight.js';
 
 const app = express();
@@ -28,7 +28,6 @@ kpisRoutes(app);
 agentsRoutes(app);
 tasksRoutes(app);
 systemRoutes(app);
-statsRoutes(app);
 insightRoutes(app);
 
 app.get('/health', (_req, res) => {

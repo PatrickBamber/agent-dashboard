@@ -128,7 +128,7 @@ export function calculateKpis(delegations, previousDelegations, range) {
  * Per-agent stats.
  */
 export function calculateAgentStats(delegations, _range) {
-  const agents = ['coding', 'research', 'pm', 'devops'];
+  const agents = ['coding', 'research', 'pm', 'devops', 'sa', 'designer', 'security', 'ba'];
   const qualityLogs = readJsonlLogs('quality');
 
   return agents.map(agent => {

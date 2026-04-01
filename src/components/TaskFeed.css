@@ -50,7 +50,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 320px;
+  max-width: none;
 }
 
 .task-agent {
@@ -78,6 +78,7 @@
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .status-completed { background: var(--green-dim); color: var(--green); }
@@ -86,10 +87,10 @@
 .status-queued { background: var(--yellow-dim); color: var(--yellow); }
 
 .task-duration {
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   color: var(--text-dim);
   font-variant-numeric: tabular-nums;
-  min-width: 60px;
+  min-width: none;
   text-align: right;
 }
 
@@ -105,9 +106,9 @@
 }
 
 .task-time {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--text-dim);
-  min-width: 65px;
+  min-width: none;
   text-align: right;
 }
 
