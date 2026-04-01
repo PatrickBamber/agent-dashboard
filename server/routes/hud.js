@@ -91,12 +91,11 @@ function getRecentDelegations(limit = 20) {
 
     return entries.slice(0, limit).map(e => ({
       task: e.task || e.description || 'Unknown task',
-      agent: e.to || e.agent || 'unknown',
+      agent: e.agent || 'unknown',
       status: e.status || 'unknown',
-      rating: e.rating || null,
-      startedAt: e.startedAt || e.timestamp || null,
-      completedAt: e.completedAt || null,
-      qualityRating: e.qualityRating || null,
+      rating: e.quality_rating || e.rating || null,
+      startedAt: e.started_at || e.ts || null,
+      completedAt: e.completed_at || null,
     }));
   } catch {
     return [];
@@ -127,12 +126,12 @@ function getTodayStats() {
       for (const line of lines) {
         try {
           const entry = JSON.parse(line);
-          const ts = new Date(entry.startedAt || entry.timestamp || 0).getTime();
+          const ts = new Date(entry.started_at || entry.ts || 0).getTime();
           if (ts < todayMs) continue;
           total++;
           if (entry.status === 'completed') completed++;
           if (entry.status === 'failed') failed++;
-          if (entry.rating) ratings.push(entry.rating);
+          if (entry.quality_rating) ratings.push(entry.quality_rating);
         } catch {
           // skip
         }

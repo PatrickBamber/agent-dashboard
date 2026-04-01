@@ -9,8 +9,8 @@ services:
     ports:
       - "127.0.0.1:3001:3001"
     volumes:
-      # OpenClaw session data (read-only)
-      - ~/.openclaw/agents/main/sessions/sessions.db:/data/sessions.db:ro
+      # OpenClaw agents directory (read-only) — needed for HUD session tracking
+      - ~/.openclaw/agents:/root/.openclaw/agents:ro
       # Agent-cabinet logs for KPIs (read-only)
       - ~/.openclaw/workspace/agent-cabinet/logs:/root/.openclaw/workspace/agent-cabinet/logs:ro
       # Insight data (written by host cron job, read by dashboard)
